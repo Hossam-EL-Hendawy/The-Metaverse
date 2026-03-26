@@ -1,4 +1,4 @@
-[README_DETAILED.md](https://github.com/user-attachments/files/26290108/README_DETAILED.md)
+
 # AI NPC Metaverse Platform
 
 A browser-based metaverse/game prototype with:
@@ -13,6 +13,14 @@ A browser-based metaverse/game prototype with:
 - Direct NPC interaction using the keyboard
 
 This project is designed to run **locally** on your machine and uses **Ollama** for local LLM inference, so you do not need a cloud AI API.
+
+<img width="1231" height="1216" alt="1" src="https://github.com/user-attachments/assets/40ffbc52-7b02-4433-b1b5-21007b50ddb0" />
+<img width="1255" height="1248" alt="2" src="https://github.com/user-attachments/assets/a2b6b5bc-8087-4ea8-9707-49554665d76b" />
+<img width="1254" height="1244" alt="3" src="https://github.com/user-attachments/assets/aae6f069-28c6-425d-8802-25dd41550baf" />
+<img width="1251" height="1251" alt="4" src="https://github.com/user-attachments/assets/73d4d427-2908-46e4-954c-62991ecfb9a2" />
+<img width="1254" height="1243" alt="5" src="https://github.com/user-attachments/assets/3fa12f65-8e35-4485-aac3-22a2b4fe7678" />
+<img width="1255" height="1199" alt="6" src="https://github.com/user-attachments/assets/4f558afd-d5ba-4ff6-bf88-31506a7415b0" />
+
 
 ---
 
