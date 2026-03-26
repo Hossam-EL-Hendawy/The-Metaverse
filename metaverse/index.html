@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>METAVERSE — Nexus Platform</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     LOADING SCREEN
+════════════════════════════════ -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <span class="logo-mx">MX</span>
+      <span class="logo-title">METAVERSE<br><small>NEXUS PLATFORM</small></span>
+    </div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar-fill" id="loader-fill"></div>
+    </div>
+    <div class="loader-status" id="loader-status">INITIALIZING ENGINE...</div>
+    <div class="loader-steps">
+      <span class="step" id="step-1">▸ WEBGL ENGINE</span>
+      <span class="step" id="step-2">▸ PHYSICS SYSTEM</span>
+      <span class="step" id="step-3">▸ WORLD LOADER</span>
+      <span class="step" id="step-4">▸ AVATAR STUDIO</span>
+      <span class="step" id="step-5">▸ NETWORK LAYER</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     MAIN CANVAS
+════════════════════════════════ -->
+<canvas id="canvas"></canvas>
+
+<!-- ════════════════════════════════
+     HUD OVERLAY
+════════════════════════════════ -->
+<div id="hud">
+
+  <!-- TOP NAV -->
+  <nav id="topnav">
+    <div class="nav-brand">
+      <span class="brand-dot"></span>
+      <span id="current-world-name">NEXUS CITY</span>
+    </div>
+    <div class="nav-worlds" id="world-tabs"></div>
+    <div class="nav-right">
+      <div class="nav-time" id="nav-time">00:00</div>
+      <button class="icon-btn" id="btn-map" title="Toggle Map">⬡</button>
+      <button class="icon-btn" id="btn-inv" title="Inventory">◈</button>
+      <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
+    </div>
+  </nav>
+
+  <!-- LEFT PANEL: AVATAR -->
+  <aside id="panel-avatar" class="side-panel">
+    <div class="panel-header">
+      <span>AVATAR STUDIO</span>
+      <button class="panel-close" onclick="togglePanel('avatar')">×</button>
+    </div>
+
+    <div class="avatar-preview-wrap">
+      <canvas id="avatar-preview" width="160" height="200"></canvas>
+      <div class="avatar-preview-glow"></div>
+    </div>
+
+    <div class="form-group">
+      <label>PLAYER NAME</label>
+      <input type="text" id="player-name" value="NEXUS_01" maxlength="14" />
+    </div>
+
+    <div class="form-group">
+      <label>AVATAR SHAPE</label>
+      <div class="btn-group" id="shape-btns">
+        <button class="seg-btn active" data-shape="humanoid">HUMAN</button>
+        <button class="seg-btn" data-shape="robot">ROBOT</button>
+        <button class="seg-btn" data-shape="ghost">GHOST</button>
+        <button class="seg-btn" data-shape="alien">ALIEN</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>PRIMARY COLOR</label>
+      <div class="swatch-row" id="primary-swatches"></div>
+    </div>
+
+    <div class="form-group">
+      <label>ACCENT COLOR</label>
+      <div class="swatch-row" id="accent-swatches"></div>
+    </div>
+
+    <div class="form-group">
+      <label>GLOW INTENSITY <span id="glow-val">50%</span></label>
+      <input type="range" id="glow-slider" min="0" max="100" value="50" />
+    </div>
+
+    <div class="form-group">
+      <label>AVATAR SIZE <span id="size-val">1.0×</span></label>
+      <input type="range" id="size-slider" min="5" max="20" value="10" />
+    </div>
+
+    <div class="form-group">
+      <label>TRAIL EFFECT</label>
+      <div class="btn-group" id="trail-btns">
+        <button class="seg-btn active" data-trail="none">OFF</button>
+        <button class="seg-btn" data-trail="fire">FIRE</button>
+        <button class="seg-btn" data-trail="ice">ICE</button>
+        <button class="seg-btn" data-trail="spark">SPARK</button>
+      </div>
+    </div>
+
+    <button class="apply-btn" id="apply-avatar">APPLY CHANGES</button>
+  </aside>
+
+  <!-- RIGHT PANEL: INVENTORY -->
+  <aside id="panel-inventory" class="side-panel right-panel" style="display:none">
+    <div class="panel-header">
+      <span>INVENTORY</span>
+      <button class="panel-close" onclick="togglePanel('inventory')">×</button>
+    </div>
+    <div class="inv-grid" id="inv-grid"></div>
+    <div class="inv-footer">
+      <span id="inv-count">0/32 items</span>
+      <button class="apply-btn">EQUIP SELECTED</button>
+    </div>
+  </aside>
+
+  <!-- STATS PANEL -->
+  <div id="stats-panel">
+    <div class="stat-row"><span class="stat-lbl">POS</span><span class="stat-val" id="stat-pos">0, 0, 0</span></div>
+    <div class="stat-row"><span class="stat-lbl">SPEED</span><span class="stat-val" id="stat-speed">0 m/s</span></div>
+    <div class="stat-row"><span class="stat-lbl">FPS</span><span class="stat-val" id="stat-fps">60</span></div>
+    <div class="stat-row"><span class="stat-lbl">ONLINE</span><span class="stat-val" id="stat-online">1</span></div>
+    <div class="stat-row"><span class="stat-lbl">PING</span><span class="stat-val" id="stat-ping">—</span></div>
+  </div>
+
+  <!-- MINIMAP -->
+  <div id="minimap-wrap" class="panel-box">
+    <div class="panel-micro-header">MAP — <span id="map-world-label">NEXUS CITY</span></div>
+    <canvas id="minimap" width="150" height="150"></canvas>
+    <div class="minimap-legend">
+      <span class="legend-dot you"></span>YOU
+      <span class="legend-dot npc"></span>NPC
+      <span class="legend-dot portal"></span>PORTAL
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div id="chat-panel">
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="Press T to chat..." readonly />
+      <button id="chat-send">▶</button>
+    </div>
+  </div>
+
+  <!-- PORTAL HINT -->
+  <div id="portal-hint" class="hint-bar" style="display:none">
+    ⬡ &nbsp; PRESS <kbd>E</kbd> TO ENTER PORTAL &nbsp; ⬡
+  </div>
+
+  <!-- INTERACT HINT -->
+  <div id="interact-hint" class="hint-bar secondary" style="display:none">
+    ◈ &nbsp; PRESS <kbd>F</kbd> TO INTERACT
+  </div>
+
+  <!-- CROSSHAIR -->
+  <div id="crosshair">
+    <div class="ch-h"></div>
+    <div class="ch-v"></div>
+  </div>
+
+  <!-- CONTROLS LEGEND -->
+  <div id="controls-legend">
+    <div><kbd>WASD</kbd> Move</div>
+    <div><kbd>MOUSE</kbd> Look</div>
+    <div><kbd>SPACE</kbd> Jump</div>
+    <div><kbd>SHIFT</kbd> Sprint</div>
+    <div><kbd>E</kbd> Portal</div>
+    <div><kbd>F</kbd> Interact</div>
+    <div><kbd>T</kbd> Chat</div>
+    <div><kbd>TAB</kbd> Avatar</div>
+    <div><kbd>M</kbd> Map</div>
+  </div>
+
+  <!-- NOTIFICATION -->
+  <div id="notif" class="notif" style="display:none"></div>
+
+  <!-- WORLD TRANSITION OVERLAY -->
+  <div id="world-flash" style="display:none"></div>
+
+</div><!-- /hud -->
+
+<!-- ════════════════════════════════
+     SCRIPTS
+════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/worlds.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/engine.js"></script>
+
+</body>
+</html>
